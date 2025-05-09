@@ -16,5 +16,8 @@
   "window.commandCenter": false,
   "workbench.sideBar.location": "left",
   "workbench.iconTheme": "vscode-icons",
-  "workbench.layoutControl.enabled": false
+  "workbench.layoutControl.enabled": false,
+
+  // Lint
+  "css.validate": false
 }
