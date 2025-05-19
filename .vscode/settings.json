@@ -12,7 +12,7 @@
   "editor.formatOnSave": true,
 
   // UI
-  "window.zoomLevel": 3,
+  "window.zoomLevel": 1,
   "window.commandCenter": false,
   "workbench.sideBar.location": "left",
   "workbench.iconTheme": "vscode-icons",
