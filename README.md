@@ -1,1 +1,1 @@
-# Easyoms
+# Ecommerce-model
