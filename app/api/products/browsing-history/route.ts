@@ -17,7 +17,7 @@ export const GET = async (request: NextRequest) => {
   const filter =
     listType === "history"
       ? {
-          _id: { $in: productIds },
+          id: { $in: productIds },
         }
       : { category: { $in: categories }, id: { $nin: productIds } };
 
