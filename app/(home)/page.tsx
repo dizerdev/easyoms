@@ -1,29 +1,32 @@
 import { HomeCard } from "@/components/shared/home/home-card";
 import { HomeCarousel } from "@/components/shared/home/home-carousel";
-import { getAllCategories, getProductsForCard } from "@/lib/actions/product.actions";
+import {
+  getAllCategories,
+  getProductsForCard,
+} from "@/lib/actions/product.actions";
 import { toSlug } from "@/lib/utils";
 import data from "@/lib/data";
 
 export default async function Page() {
-  const categories = (await getAllCategories()).slice(0, 4)
+  const categories = (await getAllCategories()).slice(0, 4);
   const newArrivals = await getProductsForCard({
-    tag: 'new-arrival',
+    tag: "new-arrival",
     limit: 4,
-  })
+  });
   const featureds = await getProductsForCard({
-    tag: 'featured',
+    tag: "featured",
     limit: 4,
-  })
+  });
   const bestSellers = await getProductsForCard({
-    tag: 'best-seller',
+    tag: "best-seller",
     limit: 4,
-  })
+  });
   const cards = [
     {
-      title: 'Categories to explore',
+      title: "Categories to explore",
       link: {
-        text: 'See More',
-        href: '/search',
+        text: "See More",
+        href: "/search",
       },
       items: categories.map((category) => ({
         name: category,
@@ -32,34 +35,35 @@ export default async function Page() {
       })),
     },
     {
-      title: 'Explore New Arrivals',
+      title: "Explore New Arrivals",
       items: newArrivals,
       link: {
-        text: 'View All',
-        href: '/search?tag=new-arrival',
+        text: "View All",
+        href: "/search?tag=new-arrival",
       },
     },
     {
-      title: 'Discover Best Sellers',
+      title: "Discover Best Sellers",
       items: bestSellers,
       link: {
-        text: 'View All',
-        href: '/search?tag=new-arrival',
+        text: "View All",
+        href: "/search?tag=new-arrival",
       },
     },
     {
-      title: 'Featured Products',
+      title: "Featured Products",
       items: featureds,
       link: {
-        text: 'Shop Now',
-        href: '/search?tag=new-arrival',
+        text: "Shop Now",
+        href: "/search?tag=new-arrival",
       },
     },
-  ]
+  ];
 
-  return ( <>
+  return (
+    <>
       <HomeCarousel items={data.carousels} />
-      <div className='md:p-4 md:space-y-4 bg-border'>
+      <div className="md:p-4 md:space-y-4 bg-border">
         <HomeCard cards={cards} />
       </div>
     </>
