@@ -11,7 +11,7 @@ const products: IProductInput[] = [
     images: ["/images/p11-1.jpg", "/images/p11-2.jpg"],
     tags: ["new-arrival"],
     isPublished: true,
-    price: 21.8,
+    price: 0.1,
     listPrice: 0,
     brand: "Nike",
     avgRating: 4.71,
