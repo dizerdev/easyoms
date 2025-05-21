@@ -1,6 +1,7 @@
 import {
   CartSchema,
   OrderItemSchema,
+  OrderInputSchema,
   ProductInputSchema,
   ShippingAddressSchema,
   UserInputSchema,
@@ -26,6 +27,7 @@ export type Data = {
   }[];
 };
 
+export type IOrderInput = z.infer<typeof OrderInputSchema>;
 export type OrderItem = z.infer<typeof OrderItemSchema>;
 export type Cart = z.infer<typeof CartSchema>;
 export type ShippingAddress = z.infer<typeof ShippingAddressSchema>;
