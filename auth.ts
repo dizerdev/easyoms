@@ -4,12 +4,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { connectToDatabase } from "./lib/db";
 import client from "./lib/db/client";
 import User from "./lib/db/models/user.model";
-
+import Google from "next-auth/providers/google";
 import NextAuth, { type DefaultSession } from "next-auth";
 import authConfig from "./auth.config";
 
 declare module "next-auth" {
-  // eslint-disable-next-line no-unused-vars
   interface Session {
     user: {
       role: string;
@@ -30,6 +29,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   adapter: MongoDBAdapter(client),
   providers: [
+    Google({
+      allowDangerousEmailAccountLinking: true,
+    }),
     CredentialsProvider({
       credentials: {
         email: {
