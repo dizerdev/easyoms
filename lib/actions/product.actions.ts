@@ -2,13 +2,14 @@
 
 import { connectToDatabase } from "@/lib/db";
 import Product, { IProduct } from "@/lib/db/models/product.model";
-import { PAGE_SIZE } from "../constants";
 import { revalidatePath } from "next/cache";
 import { formatError } from "../utils";
 import { ProductInputSchema, ProductUpdateSchema } from "../validator";
 import { IProductInput } from "@/types";
 import { z } from "zod";
+import { getSetting } from "./setting.actions";
 
+// CREATE
 export async function createProduct(data: IProductInput) {
   try {
     const product = ProductInputSchema.parse(data);
@@ -24,10 +25,10 @@ export async function createProduct(data: IProductInput) {
   }
 }
 
+// UPDATE
 export async function updateProduct(data: z.infer<typeof ProductUpdateSchema>) {
   try {
     const product = ProductUpdateSchema.parse(data);
-    console.log(product);
     await connectToDatabase();
     await Product.findByIdAndUpdate(product._id, product);
     revalidatePath("/admin/products");
@@ -39,13 +40,7 @@ export async function updateProduct(data: z.infer<typeof ProductUpdateSchema>) {
     return { success: false, message: formatError(error) };
   }
 }
-
-export async function getProductById(productId: string) {
-  await connectToDatabase();
-  const product = await Product.findById(productId);
-  return JSON.parse(JSON.stringify(product)) as IProduct;
-}
-
+// DELETE
 export async function deleteProduct(id: string) {
   try {
     await connectToDatabase();
@@ -60,7 +55,14 @@ export async function deleteProduct(id: string) {
     return { success: false, message: formatError(error) };
   }
 }
+// GET ONE PRODUCT BY ID
+export async function getProductById(productId: string) {
+  await connectToDatabase();
+  const product = await Product.findById(productId);
+  return JSON.parse(JSON.stringify(product)) as IProduct;
+}
 
+// GET ALL PRODUCTS FOR ADMIN
 export async function getAllProductsForAdmin({
   query,
   page = 1,
@@ -74,7 +76,10 @@ export async function getAllProductsForAdmin({
 }) {
   await connectToDatabase();
 
-  const pageSize = limit || PAGE_SIZE;
+  const {
+    common: { pageSize },
+  } = await getSetting();
+  limit = limit || pageSize;
   const queryFilter =
     query && query !== "all"
       ? {
@@ -99,8 +104,8 @@ export async function getAllProductsForAdmin({
     ...queryFilter,
   })
     .sort(order)
-    .skip(pageSize * (Number(page) - 1))
-    .limit(pageSize)
+    .skip(limit * (Number(page) - 1))
+    .limit(limit)
     .lean();
 
   const countProducts = await Product.countDocuments({
@@ -122,7 +127,6 @@ export async function getAllCategories() {
   );
   return categories;
 }
-
 export async function getProductsForCard({
   tag,
   limit = 4,
@@ -147,7 +151,7 @@ export async function getProductsForCard({
     image: string;
   }[];
 }
-
+// GET PRODUCTS BY TAG
 export async function getProductsByTag({
   tag,
   limit = 10,
@@ -165,17 +169,18 @@ export async function getProductsByTag({
   return JSON.parse(JSON.stringify(products)) as IProduct[];
 }
 
+// GET ONE PRODUCT BY SLUG
 export async function getProductBySlug(slug: string) {
   await connectToDatabase();
   const product = await Product.findOne({ slug, isPublished: true });
   if (!product) throw new Error("Product not found");
   return JSON.parse(JSON.stringify(product)) as IProduct;
 }
-
+// GET RELATED PRODUCTS: PRODUCTS WITH SAME CATEGORY
 export async function getRelatedProductsByCategory({
   category,
   productId,
-  limit = PAGE_SIZE,
+  limit = 4,
   page = 1,
 }: {
   category: string;
@@ -183,6 +188,10 @@ export async function getRelatedProductsByCategory({
   limit?: number;
   page: number;
 }) {
+  const {
+    common: { pageSize },
+  } = await getSetting();
+  limit = limit || pageSize;
   await connectToDatabase();
   const skipAmount = (Number(page) - 1) * limit;
   const conditions = {
@@ -201,6 +210,7 @@ export async function getRelatedProductsByCategory({
   };
 }
 
+// GET ALL PRODUCTS
 export async function getAllProducts({
   query,
   limit,
@@ -220,7 +230,10 @@ export async function getAllProducts({
   rating?: string;
   sort?: string;
 }) {
-  limit = limit || PAGE_SIZE;
+  const {
+    common: { pageSize },
+  } = await getSetting();
+  limit = limit || pageSize;
   await connectToDatabase();
 
   const queryFilter =

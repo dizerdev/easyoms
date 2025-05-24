@@ -1,6 +1,7 @@
 import { Data, IProductInput, IUserInput } from "@/types";
 import { toSlug } from "./utils";
 import bcrypt from "bcryptjs";
+import { i18n } from "@/i18n-config";
 
 const products: IProductInput[] = [
   // T-Shirts
@@ -1062,6 +1063,94 @@ const data: Data = {
   products,
   users,
   reviews,
+  settings: [
+    {
+      common: {
+        freeShippingMinPrice: 35,
+        isMaintenanceMode: false,
+        defaultTheme: "Light",
+        defaultColor: "Blue",
+        pageSize: 9,
+      },
+      site: {
+        name: "Easyoms",
+        description:
+          "Easyoms is a sample Ecommerce website built with Next.js, Tailwind CSS, and MongoDB.",
+        keywords: "Next Ecommerce, Next.js, Tailwind CSS, MongoDB",
+        url: "https://next-mongo-ecommerce-final.vercel.app",
+        logo: "/icons/logo.svg",
+        slogan: "Spend less, enjoy more.",
+        author: "Diego Santos Dev",
+        copyright: "2025, easyoms.com.br, Inc. or its affiliates",
+        email: "zerbiniprogramador@gmail.com",
+        address: "Rua Teste, 123 - Testolandia",
+        phone: "11 98692-1165",
+      },
+      carousels: [
+        {
+          title: "Most Popular Shoes For Sale",
+          buttonCaption: "Shop Now",
+          image: "/images/banner3.jpg",
+          url: "/search?category=Shoes",
+        },
+        {
+          title: "Best Sellers in T-Shirts",
+          buttonCaption: "Shop Now",
+          image: "/images/banner1.jpg",
+          url: "/search?category=T-Shirts",
+        },
+        {
+          title: "Best Deals on Wrist Watches",
+          buttonCaption: "See More",
+          image: "/images/banner2.jpg",
+          url: "/search?category=Wrist Watches",
+        },
+      ],
+      availableLanguages: i18n.locales.map((locale) => ({
+        code: locale.code,
+        name: locale.name,
+      })),
+      defaultLanguage: "en-US",
+      availableCurrencies: [
+        {
+          name: "United States Dollar",
+          code: "USD",
+          symbol: "$",
+          convertRate: 1,
+        },
+        { name: "Euro", code: "EUR", symbol: "€", convertRate: 0.96 },
+        { name: "UAE Dirham", code: "AED", symbol: "AED", convertRate: 3.67 },
+      ],
+      defaultCurrency: "USD",
+      availablePaymentMethods: [
+        { name: "PayPal", commission: 0 },
+        { name: "Stripe", commission: 0 },
+        { name: "Cash On Delivery", commission: 0 },
+      ],
+      defaultPaymentMethod: "PayPal",
+      availableDeliveryDates: [
+        {
+          name: "Tomorrow",
+          daysToDeliver: 1,
+          shippingPrice: 12.9,
+          freeShippingMinPrice: 0,
+        },
+        {
+          name: "Next 3 Days",
+          daysToDeliver: 3,
+          shippingPrice: 6.9,
+          freeShippingMinPrice: 0,
+        },
+        {
+          name: "Next 5 Days",
+          daysToDeliver: 5,
+          shippingPrice: 4.9,
+          freeShippingMinPrice: 35,
+        },
+      ],
+      defaultDeliveryDate: "Next 5 Days",
+    },
+  ],
   webPages: [
     {
       title: "About Us",
