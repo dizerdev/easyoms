@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+
 import qs from "query-string";
 
 export function formUrlQuery({
@@ -32,6 +33,8 @@ export const formatNumberWithDecimal = (num: number): string => {
   const [int, decimal] = num.toString().split(".");
   return decimal ? `${int}.${decimal.padEnd(2, "0")}` : int;
 };
+// PROMPT: [ChatGTP] create toSlug ts arrow function that convert text to lowercase, remove non-word,
+// non-whitespace, non-hyphen characters, replace whitespace, trim leading hyphens and trim trailing hyphens
 
 export const toSlug = (text: string): string =>
   text
@@ -46,7 +49,6 @@ const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
   style: "currency",
   minimumFractionDigits: 2,
 });
-
 export function formatCurrency(amount: number) {
   return CURRENCY_FORMATTER.format(amount);
 }
@@ -92,23 +94,22 @@ export function calculateFutureDate(days: number) {
   currentDate.setDate(currentDate.getDate() + days);
   return currentDate;
 }
+export function getMonthName(yearMonth: string): string {
+  const [year, month] = yearMonth.split("-").map(Number);
+  const date = new Date(year, month - 1);
+  const monthName = date.toLocaleString("default", { month: "long" });
+  const now = new Date();
 
-export function getMonthName(yearAndMonth: string) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [year, monthNumber] = yearAndMonth.split("-");
-  const date = new Date();
-  date.setMonth(parseInt(monthNumber) - 1);
-  return new Date().getMonth() === parseInt(monthNumber) - 1
-    ? `${date.toLocaleString("default", { month: "long" })} (ongoing)`
-    : date.toLocaleString("default", { month: "long" });
+  if (year === now.getFullYear() && month === now.getMonth() + 1) {
+    return `${monthName} Ongoing`;
+  }
+  return monthName;
 }
-
 export function calculatePastDate(days: number) {
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - days);
   return currentDate;
 }
-
 export function timeUntilMidnight(): { hours: number; minutes: number } {
   const now = new Date();
   const midnight = new Date();
