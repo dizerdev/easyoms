@@ -1,6 +1,7 @@
 import { SearchIcon } from "lucide-react";
-import { getAllCategories } from "@/lib/actions/product.actions";
+
 import { Input } from "@/components/ui/input";
+import { getAllCategories } from "@/lib/actions/product.actions";
 
 import {
   Select,
@@ -8,18 +9,26 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { APP_NAME } from "@/lib/constants";
-const categories = await getAllCategories();
+} from "../../ui/select";
+
+import { getTranslations } from "next-intl/server";
+import { getSetting } from "@/lib/actions/setting.actions";
+
 export default async function Search() {
+  const {
+    site: { name },
+  } = await getSetting();
+  const categories = await getAllCategories();
+
+  const t = await getTranslations();
   return (
     <form action="/search" method="GET" className="flex  items-stretch h-10 ">
       <Select name="category">
-        <SelectTrigger className="w-auto h-full dark:border-gray-200 bg-gray-100 text-black border-r  rounded-r-none rounded-l-md">
-          <SelectValue placeholder="Por Categoria" />
+        <SelectTrigger className="w-auto h-full dark:border-gray-200 bg-gray-100 text-black border-r  rounded-r-none rounded-l-md rtl:rounded-r-md rtl:rounded-l-none  ">
+          <SelectValue placeholder={t("Header.All")} />
         </SelectTrigger>
         <SelectContent position="popper">
-          <SelectItem value="all">Todas</SelectItem>
+          <SelectItem value="all">{t("Header.All")}</SelectItem>
           {categories.map((category) => (
             <SelectItem key={category} value={category}>
               {category}
@@ -29,7 +38,7 @@ export default async function Search() {
       </Select>
       <Input
         className="flex-1 rounded-none dark:border-gray-200 bg-gray-100 text-black text-base h-full"
-        placeholder={`Busar em todo ${APP_NAME}`}
+        placeholder={t("Header.Search Site", { name })}
         name="q"
         type="search"
       />

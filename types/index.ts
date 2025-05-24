@@ -1,4 +1,10 @@
 import {
+  CarouselSchema,
+  DeliveryDateSchema,
+  PaymentMethodSchema,
+  SettingInputSchema,
+  SiteCurrencySchema,
+  SiteLanguageSchema,
   CartSchema,
   OrderItemSchema,
   OrderInputSchema,
@@ -25,6 +31,7 @@ export type IReviewDetails = IReviewInput & {
 export type IProductInput = z.infer<typeof ProductInputSchema>;
 export type Data = {
   webPages: IWebPageInput[];
+  settings: ISettingInput[];
   users: IUserInput[];
   products: IProductInput[];
   reviews: {
@@ -65,3 +72,13 @@ export type IUserSignUp = z.infer<typeof UserSignUpSchema>;
 export type IUserName = z.infer<typeof UserNameSchema>;
 
 export type IWebPageInput = z.infer<typeof WebPageInputSchema>;
+
+export type ICarousel = z.infer<typeof CarouselSchema>;
+export type ISettingInput = z.infer<typeof SettingInputSchema>;
+export type ClientSetting = ISettingInput & {
+  currency: string;
+};
+export type SiteLanguage = z.infer<typeof SiteLanguageSchema>;
+export type SiteCurrency = z.infer<typeof SiteCurrencySchema>;
+export type PaymentMethod = z.infer<typeof PaymentMethodSchema>;
+export type DeliveryDate = z.infer<typeof DeliveryDateSchema>;
