@@ -1119,7 +1119,7 @@ const data: Data = {
           convertRate: 1,
         },
         { name: "Euro", code: "EUR", symbol: "€", convertRate: 0.96 },
-        { name: "UAE Dirham", code: "AED", symbol: "AED", convertRate: 3.67 },
+        { name: "Real", code: "BRL", symbol: "R$", convertRate: 5.64 },
       ],
       defaultCurrency: "USD",
       availablePaymentMethods: [
